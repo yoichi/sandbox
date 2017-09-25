@@ -1,3 +1,5 @@
+import os
+
 a = 0 # E261
 
 # E302
