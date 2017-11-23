@@ -12,6 +12,14 @@ jobs:
     steps:
       - checkout
       - run: python setup.py test
+  wait_all_tests:
+    docker:
+      - image: circleci/python:3.6
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - run: ls /tmp/workspace/*
 workflows:
   version: 2
   build_and_test:
