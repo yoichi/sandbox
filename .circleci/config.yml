@@ -2,19 +2,19 @@ version: 2
 jobs:
   flake8:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.7
     steps:
       - checkout
       - run: python setup.py flake8
   test:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.7
     steps:
       - checkout
       - run: python setup.py test
   build:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.7
     steps:
       - checkout
       - run: python setup.py bdist_wheel
