@@ -1,0 +1,13 @@
+name: checkout sample
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run commands
+      run: |
+        git log -1
+
