@@ -1,0 +1,33 @@
+name: Compare Python ASTs
+
+on: [push]
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: detect revision
+      run: |
+        echo "REF_REVISION=$(git log -1|sed -ne 's/.*\[compare_py_ast_with:\(.*\)\].*/\1/p'|head -1)" >> $GITHUB_ENV
+  compare:
+    runs-on: ubuntu-latest
+    if: env.REF_REVISION != ''
+    steps:
+    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v2
+      with:
+        path: ref
+        ref: ${{ env.REF_REVISION }}
+    - uses: actions/checkout@v2
+      with:
+        path: HEAD
+    - name: take hash of ref
+      run: |
+        cd ref && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(sys.argv[1] + ':' + hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest())" {} \; > ../ref.hash
+    - name: take hash of HEAD
+      run: |
+        cd HEAD && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(sys.argv[1] + ':' + hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest())" {} \; > ../HEAD.hash
+    - name: compare
+      run: |
+        diff ref.hash HEAD.hash
