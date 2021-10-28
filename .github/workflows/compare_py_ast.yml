@@ -3,17 +3,15 @@ name: Compare Python ASTs
 on: [push]
 
 jobs:
-  detect:
+  compare:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: detect revision
       run: |
         echo "REF_REVISION=$(git log -1|sed -ne 's/.*\[compare_py_ast_with:\(.*\)\].*/\1/p'|head -1)" >> $GITHUB_ENV
-  compare:
-    runs-on: ubuntu-latest
-    steps:
     - uses: actions/setup-python@v2
+      if: env.REF_REVISION != ''
     - uses: actions/checkout@v2
       if: env.REF_REVISION != ''
       with:
