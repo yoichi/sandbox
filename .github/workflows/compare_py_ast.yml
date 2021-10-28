@@ -12,7 +12,7 @@ jobs:
         echo "REF_REVISION=$(git log -1|sed -ne 's/.*\[compare_py_ast_with:\(.*\)\].*/\1/p'|head -1)" >> $GITHUB_ENV
   compare:
     runs-on: ubuntu-latest
-    if: env.REF_REVISION != ''
+    if: ${{ env.REF_REVISION != '' }}
     steps:
     - uses: actions/setup-python@v2
     - uses: actions/checkout@v2
