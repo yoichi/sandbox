@@ -12,22 +12,26 @@ jobs:
         echo "REF_REVISION=$(git log -1|sed -ne 's/.*\[compare_py_ast_with:\(.*\)\].*/\1/p'|head -1)" >> $GITHUB_ENV
   compare:
     runs-on: ubuntu-latest
-    if: ${{ env.REF_REVISION != '' }}
     steps:
     - uses: actions/setup-python@v2
     - uses: actions/checkout@v2
+      if: env.REF_REVISION != ''
       with:
         path: ref
         ref: ${{ env.REF_REVISION }}
     - uses: actions/checkout@v2
+      if: env.REF_REVISION != ''
       with:
         path: HEAD
     - name: take hash of ref
+      if: env.REF_REVISION != ''
       run: |
         cd ref && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(sys.argv[1] + ':' + hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest())" {} \; > ../ref.hash
     - name: take hash of HEAD
+      if: env.REF_REVISION != ''
       run: |
         cd HEAD && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(sys.argv[1] + ':' + hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest())" {} \; > ../HEAD.hash
     - name: compare
+      if: env.REF_REVISION != ''
       run: |
         diff ref.hash HEAD.hash
