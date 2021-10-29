@@ -29,11 +29,11 @@ jobs:
     - name: take hash of ref
       if: env.REF_REVISION != ''
       run: |
-        cd ref && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(sys.argv[1] + ':' + hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest())" {} \; > ../ref.hash
+        cd ref && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ../ref.hash
     - name: take hash of HEAD
       if: env.REF_REVISION != ''
       run: |
-        cd HEAD && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(sys.argv[1] + ':' + hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest())" {} \; > ../HEAD.hash
+        cd HEAD && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ../HEAD.hash
     - name: compare
       if: env.REF_REVISION != ''
       run: |
