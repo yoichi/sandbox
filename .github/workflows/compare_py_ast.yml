@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: .github/actions/compare-py-ast-with
+    - uses: ./.github/actions/compare-py-ast-with
   compare_with_default_branch:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: .github/actions/compare-py-ast
+    - uses: ./.github/actions/compare-py-ast
