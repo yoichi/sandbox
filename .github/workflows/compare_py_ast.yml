@@ -50,7 +50,7 @@ jobs:
       run: |
         if git log -1|grep -F '[compare_py_ast]'; then
             git fetch --unshallow
-            echo "REF_REVISION=$(git merge-base ${DEFAULT_BRANCH} HEAD)" >> $GITHUB_ENV
+            echo "REF_REVISION=$(git merge-base origin/${DEFAULT_BRANCH} HEAD)" >> $GITHUB_ENV
         fi
     - uses: actions/setup-python@v2
       if: env.REF_REVISION != ''
