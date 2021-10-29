@@ -6,8 +6,8 @@ jobs:
   compare_with_revision:
     runs-on: ubuntu-latest
     steps:
-    - use: .github/actions/compare-py-ast-with
+    - uses: .github/actions/compare-py-ast-with
   compare_with_default_branch:
     runs-on: ubuntu-latest
     steps:
-    - use: .github/actions/compare-py-ast
+    - uses: .github/actions/compare-py-ast
