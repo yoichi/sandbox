@@ -4,6 +4,7 @@ runs:
   steps:
   - uses: actions/checkout@v2
   - name: detect revision
+    shell: bash
     env:
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
     run: |
@@ -25,14 +26,17 @@ runs:
     with:
       path: HEAD
   - name: take hash of ref
+    shell: bash
     if: env.REF_REVISION != ''
     run: |
       cd ref && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ../ref.hash
   - name: take hash of HEAD
+    shell: bash
     if: env.REF_REVISION != ''
     run: |
       cd HEAD && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ../HEAD.hash
   - name: compare
+    shell: bash
     if: env.REF_REVISION != ''
     run: |
       diff ref.hash HEAD.hash
