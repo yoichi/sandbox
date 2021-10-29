@@ -48,7 +48,7 @@ jobs:
       env:
         DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
       run: |
-        if $(git log -1|grep -F '[compare_py_ast]'); then
+        if git log -1|grep -F '[compare_py_ast]'; then
             git fetch --unshallow
             echo "REF_REVISION=$(git merge-base ${DEFAULT_BRANCH} HEAD)" >> $GITHUB_ENV
         fi
