@@ -1,4 +1,8 @@
-name: Compare Python AST with default branch
+name: Compare Python AST with specified revision
+inputs:
+  revision:
+    description: commit hash of the reference revision to be compared with HEAD
+    required: true
 runs:
   using: composite
   steps:
@@ -7,7 +11,7 @@ runs:
     uses: actions/checkout@v2
     with:
       path: ref
-      ref: ${{ env.REF_REVISION }}
+      ref: ${{ env.INPUT_REVISION }}
   - name: checkout HEAD
     uses: actions/checkout@v2
     with:
