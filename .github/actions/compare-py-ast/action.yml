@@ -9,7 +9,7 @@ runs:
   - name: test inputs
     shell: bash
     run: |
-      test -n ${INPUT_REVISION}
+      test -n "${INPUT_REVISION}"
   - uses: actions/setup-python@v2
   - name: checkout ref
     uses: actions/checkout@v2
