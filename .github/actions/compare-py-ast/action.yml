@@ -9,13 +9,13 @@ runs:
   - name: test inputs
     shell: bash
     run: |
-      test -n "${INPUT_REVISION}"
+      test -n "${{ inputs.revision }}"
   - uses: actions/setup-python@v2
   - name: checkout ref
     uses: actions/checkout@v2
     with:
       path: ref
-      ref: ${{ env.INPUT_REVISION }}
+      ref: ${{ inputs.revision }}
   - name: checkout HEAD
     uses: actions/checkout@v2
     with:
