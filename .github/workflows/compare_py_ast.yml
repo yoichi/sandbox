@@ -9,13 +9,13 @@ jobs:
     - uses: actions/checkout@v2
     - name: detect revision
       run: |
-        echo "REF_REVISION=$(git log -1|sed -ne 's/.*\[compare_py_ast_with:\(.*\)\].*/\1/p'|head -1)" >> $GITHUB_ENV
+        echo "REF_REVISION=$(git log -1|sed -ne 's/.*\[compare_py_ast:\(.*\)\].*/\1/p'|head -1)" >> $GITHUB_ENV
     - name: parse revision
       if: contains(env.REF_REVISION, '~') || contains(env.REF_REVISION, '^')
       run: |
         git fetch --unshallow
         echo "REF_REVISION=$(git rev-parse ${REF_REVISION})" >> $GITHUB_ENV
-    - uses: ./.github/actions/compare-py-ast-with
+    - uses: ./.github/actions/compare-py-ast
       if: env.REF_REVISION != ''
       with:
         revision: ${{ env.REF_REVISION }}
