@@ -15,7 +15,7 @@ jobs:
       run: |
         git fetch --unshallow
         echo "REF_REVISION=$(git rev-parse ${REF_REVISION})" >> $GITHUB_ENV
-    - uses: ./.github/actions/compare-py-ast
+    - uses: .github/actions/compare-py-ast
       if: env.REF_REVISION != ''
       with:
         revision: ${{ env.REF_REVISION }}
@@ -32,7 +32,7 @@ jobs:
             git fetch --unshallow
             echo "REF_REVISION=$(git merge-base origin/${DEFAULT_BRANCH} HEAD)" >> $GITHUB_ENV
         fi
-    - uses: ./.github/actions/compare-py-ast
+    - uses: .github/actions/compare-py-ast
       if: env.REF_REVISION != ''
       with:
         revision: ${{ env.REF_REVISION }}
