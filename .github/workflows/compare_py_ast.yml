@@ -17,6 +17,8 @@ jobs:
         echo "REF_REVISION=$(git rev-parse ${REF_REVISION})" >> $GITHUB_ENV
     - uses: ./.github/actions/compare-py-ast-with
       if: env.REF_REVISION != ''
+      with:
+        revision: ${{ env.REF_REVISION }}
   compare_with_default_branch:
     runs-on: ubuntu-latest
     steps:
@@ -32,3 +34,5 @@ jobs:
         fi
     - uses: ./.github/actions/compare-py-ast
       if: env.REF_REVISION != ''
+      with:
+        revision: ${{ env.REF_REVISION }}
