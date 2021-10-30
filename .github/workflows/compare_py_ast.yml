@@ -7,9 +7,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: detect revision
+      run: |
+        echo "REF_REVISION=$(git log -1|sed -ne 's/.*\[compare_py_ast_with:\(.*\)\].*/\1/p'|head -1)" >> $GITHUB_ENV
+    - name: parse revision
+      if: contains(env.REF_REVISION, '~') || contains(env.REF_REVISION, '^')
+      run: |
+        git fetch --unshallow
+        echo "REF_REVISION=$(git rev-parse ${REF_REVISION})" >> $GITHUB_ENV
     - uses: ./.github/actions/compare-py-ast-with
+      if: env.REF_REVISION != ''
   compare_with_default_branch:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: detect revision
+      shell: bash
+      env:
+        DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      run: |
+        if git log -1|grep -F '[compare_py_ast]'; then
+            git fetch --unshallow
+            echo "REF_REVISION=$(git merge-base origin/${DEFAULT_BRANCH} HEAD)" >> $GITHUB_ENV
+        fi
     - uses: ./.github/actions/compare-py-ast
+      if: env.REF_REVISION != ''
