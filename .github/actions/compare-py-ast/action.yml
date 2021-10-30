@@ -23,12 +23,16 @@ runs:
   - name: take hash of ref
     shell: bash
     run: |
-      cd ref && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ../ref.hash
+      REF_HASH=$(mktemp)
+      cd ref && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ${REF_HASH}
+      echo "REF_HASH=${REF_HASH}" >> $GITHUB_ENV
   - name: take hash of HEAD
     shell: bash
     run: |
-      cd HEAD && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ../HEAD.hash
+      HEAD_HASH=$(mktemp)
+      cd HEAD && find . -type f -name \*.py -exec python -c "import ast;import hashlib;import sys;print(hashlib.sha256(ast.dump(ast.parse(open(sys.argv[1]).read())).encode('utf-8')).hexdigest(), sys.argv[1])" {} \; > ${HEAD_HASH}
+      echo "HEAD_HASH=${HEAD_HASH}" >> $GITHUB_ENV
   - name: compare
     shell: bash
     run: |
-      diff ref.hash HEAD.hash
+      diff ${REF_HASH} ${HEAD_HASH}
